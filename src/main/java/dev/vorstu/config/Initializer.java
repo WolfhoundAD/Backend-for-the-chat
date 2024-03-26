@@ -1,4 +1,5 @@
 package dev.vorstu.config;
+
 import dev.vorstu.entity.Password;
 import dev.vorstu.entity.Student;
 import dev.vorstu.entity.User;
@@ -8,6 +9,8 @@ import dev.vorstu.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+
 @Component
 public class Initializer {
     @Autowired
@@ -16,18 +19,32 @@ public class Initializer {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public void initial(){
-        studentRepository.save(new Student("Alex Popovoch", "PO", "+79105559980"));
-        studentRepository.save(new Student("Dobrinya Nikitich", "AP", "+79104443322"));
-        studentRepository.save(new Student("Ilya Myrometc", "PO", "+79108439933"));
+        // Добавление обычного студента
+        Student student1 = new Student("Alex Popovoch", "PO", "+79105559980");
+        studentRepository.save(student1);
 
-        User student = new User(
-                null,
-                "student",
+        User studentUser1 = new User(
+                "student1",
                 Role.STUDENT,
-                new Password("1234"), // Удалили кодирование пароля
+                new Password("1234"),
                 true
         );
-        userRepository.save(student);
+        studentUser1.setStudent(student1);
+        userRepository.save(studentUser1);
+
+        // Добавление администратора
+        Student adminStudent = new Student("Admin", "Admin Group", "+79999999999");
+        studentRepository.save(adminStudent);
+
+        User adminUser = new User(
+                "admin",
+                Role.ADMIN,
+                new Password("admin123"),
+                true
+        );
+        adminUser.setStudent(adminStudent);
+        userRepository.save(adminUser);
     }
 }

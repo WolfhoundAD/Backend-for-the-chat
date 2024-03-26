@@ -27,5 +27,16 @@ public class User {
     @JoinColumn(name = "password_id", nullable = false)
     private Password password;
 
+    @OneToOne(fetch =  FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
+
     private boolean enable;
+
+    public User(String username, Role role, Password password, boolean enable) {
+        this.username = username;
+        this.role = role;
+        this.password = password;
+        this.enable = enable;
+    }
 }
