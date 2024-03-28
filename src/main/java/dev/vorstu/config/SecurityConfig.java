@@ -1,5 +1,9 @@
 package dev.vorstu.config;
 import dev.vorstu.enums.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,15 +22,10 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Autowired
+    private  DataSource dataSource;
 
-    private final DataSource dataSource;
-    private final PasswordEncoder passwordEncoder;
-
-    public SecurityConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
-
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/api/login/**").permitAll()
@@ -50,15 +49,20 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder)
+                .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery(
-                        "select username, p.password as password, enable "
+                        "select username, p.password as passwords, enable "
                                 + "from users as u "
-                                + "inner join password as p on u.password_id = p.id "
+                                + "inner join passwords as p on u.password_id = p.id "
                                 + "where username = ?")
                 .authoritiesByUsernameQuery("select username, role from users where username = ?");
+    }
+
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
