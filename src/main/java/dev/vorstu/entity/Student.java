@@ -25,7 +25,8 @@ public class Student {
     private String group;
     @Column(name="phone_number")
     private String phoneNumber;
-
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    private User user;
     public String getPhoneNumber() {
         return phoneNumber;
     }

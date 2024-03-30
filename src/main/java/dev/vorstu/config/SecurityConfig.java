@@ -30,7 +30,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/api/login/**").permitAll()
                 // For STUDENT
-                .antMatchers("/api/base/students/**").hasAuthority(Role.STUDENT.name())
+                .antMatchers("/api/base/students/**").hasAuthority(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()

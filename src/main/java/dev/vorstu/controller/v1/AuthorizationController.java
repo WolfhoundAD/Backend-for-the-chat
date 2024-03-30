@@ -30,10 +30,10 @@ public class AuthorizationController {
                 AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY
         );
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
-        cookieClearingLogoutHandler.logout(request, response,null);
-        securityContextLogoutHandler.logout(request,response,null);
+        cookieClearingLogoutHandler.logout(request, response, null);
+        securityContextLogoutHandler.logout(request, response, null);
 
-        return  user;
+        return user;
     }
 
 }
