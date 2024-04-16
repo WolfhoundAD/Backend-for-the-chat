@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long chatID;
+    private Long chatId;
 
     @Column(name = "ChatName")
     private String chatName;

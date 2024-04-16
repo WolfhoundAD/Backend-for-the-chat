@@ -13,11 +13,11 @@ import javax.persistence.*;
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long profileID;
+    private Long profileId;
 
     @ManyToOne
     @JoinColumn(name = "UserID")
-    private User user;
+    private User userId;
 
     @Column(name = "FullName")
     private String fullName;

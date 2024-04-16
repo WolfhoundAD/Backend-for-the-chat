@@ -7,9 +7,9 @@ import javax.persistence.*;
 public class ChatParticipantId implements Serializable {
 
     @Column(name = "ChatID")
-    private Long chatID;
+    private Long chatId;
 
     @Column(name = "ProfileID")
-    private Long profileID;
+    private Long profileId;
 
 }

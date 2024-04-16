@@ -12,10 +12,10 @@ import javax.persistence.*;
 public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long attachmentID;
+    private Long attachmentId;
 
-    @ManyToOne
-    @JoinColumn(name = "MessageID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "message_id")
     private Message message;
 
     @Column(name = "FilePath")

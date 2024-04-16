@@ -12,15 +12,15 @@ import javax.persistence.*;
 public class ReadStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long readStatusID;
+    private Long readStatusId;
 
     @ManyToOne
     @JoinColumn(name = "MessageID")
-    private Message message;
+    private Message messageId;
 
     @ManyToOne
     @JoinColumn(name = "ProfileID")
-    private Profile profile;
+    private Profile profileId;
 
     @Column(name = "IsRead")
     private boolean isRead;

@@ -15,12 +15,12 @@ public class ChatParticipant {
     private ChatParticipantId id;
 
     @ManyToOne
-    @MapsId("chatID")
+    @MapsId("chatId")
     @JoinColumn(name = "ChatID")
-    private Chat chat;
+    private Chat chatId;
 
     @ManyToOne
-    @MapsId("profileID")
+    @MapsId("profileId")
     @JoinColumn(name = "ProfileID")
-    private Profile profile;
+    private Profile profileId;
 }

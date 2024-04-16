@@ -2,6 +2,7 @@ package dev.chat.entity;
 import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -13,7 +14,7 @@ import java.sql.Timestamp;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userID;
+    private Long userId;
 
     @Column(name = "Username")
     private String username;
@@ -25,5 +26,5 @@ public class User {
     private String role;
 
     @Column(name = "LastLogin")
-    private Timestamp lastLogin;
+    private LocalDate lastLogin;
 }
