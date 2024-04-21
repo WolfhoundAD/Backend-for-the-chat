@@ -10,17 +10,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "ChatParticipants")
 public class ChatParticipant {
-
-    @EmbeddedId
-    private ChatParticipantId id;
-
-    @ManyToOne
-    @MapsId("chatId")
-    @JoinColumn(name = "ChatID")
-    private Chat chatId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long chatParticipantId;
 
     @ManyToOne
-    @MapsId("profileId")
-    @JoinColumn(name = "ProfileID")
-    private Profile profileId;
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

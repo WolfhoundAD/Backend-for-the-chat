@@ -1,54 +1,58 @@
 package dev.chat.service;
 
 import dev.chat.entity.Chat;
-import dev.chat.entity.ChatParticipant;
-import dev.chat.entity.Profile;
-import dev.chat.repository.ChatParticipantRepository;
+import dev.chat.entity.User;
 import dev.chat.repository.ChatRepository;
+import dev.chat.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatService {
+
     private final ChatRepository chatRepository;
-    private final ProfileService profileService;
-    private final ChatParticipantRepository chatParticipantRepository;
+    private final UserRepository userRepository;
 
-    public ChatService(ChatRepository chatRepository, ProfileService profileService, ChatParticipantRepository chatParticipantRepository) {
+    @Autowired
+    public ChatService(ChatRepository chatRepository, UserRepository userRepository) {
         this.chatRepository = chatRepository;
-        this.profileService = profileService;
-        this.chatParticipantRepository = chatParticipantRepository;
+        this.userRepository = userRepository;
     }
 
+    // Создать чат
     public Chat createChat(String chatName, List<Long> participantIds) {
-        Chat chat = new Chat();
-        chat.setChatName(chatName);
-        Chat savedChat = chatRepository.save(chat);
-
-        // Создание записей ChatParticipant для каждого участника чата
-        for (Long profileId : participantIds) {
-            Profile participant = profileService.getProfileById(profileId);
-            ChatParticipant chatParticipant = new ChatParticipant();
-            chatParticipant.setChatId(savedChat);
-            chatParticipant.setProfileId(participant);
-            chatParticipantRepository.save(chatParticipant);
-        }
-
-        return savedChat;
+        List<User> participants = userRepository.findAllById(participantIds);
+        Chat chat = Chat.builder()
+                .chatName(chatName)
+                .participants(participants)
+                .build();
+        return chatRepository.save(chat);
     }
 
+    // Получить все чаты для пользователя
     public List<Chat> getAllChatsForUser(Long userId) {
-        List<Chat> chats = new ArrayList<>();
-        List<Profile> profiles = profileService.getAllProfilesForUser(userId);
-       // for (Profile profile : profiles) {
-         //   List<Chat> userChats = chatRepository.findByParticipants(profile);
-           // chats.addAll(userChats);
-       // }
-        return chats;
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            return chatRepository.findAllByParticipantsContains(userOptional.get());
+        }
+        return null;
     }
 
+    // Переименовать чат
+    public Chat renameChat(Long chatId, String newChatName) {
+        Optional<Chat> chatOptional = chatRepository.findById(chatId);
+        if (chatOptional.isPresent()) {
+            Chat chat = chatOptional.get();
+            chat.setChatName(newChatName);
+            return chatRepository.save(chat);
+        }
+        return null;
+    }
+
+    // Удалить чат
     public void deleteChat(Long chatId) {
         chatRepository.deleteById(chatId);
     }

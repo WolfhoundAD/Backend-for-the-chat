@@ -1,6 +1,7 @@
 package dev.chat.entity;
 import lombok.*;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,4 +17,12 @@ public class Chat {
 
     @Column(name = "ChatName")
     private String chatName;
+
+    @ManyToMany
+    @JoinTable(
+            name = "ChatParticipants",
+            joinColumns = @JoinColumn(name = "chat_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> participants;
 }

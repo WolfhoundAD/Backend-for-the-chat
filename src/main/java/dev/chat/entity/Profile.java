@@ -17,11 +17,13 @@ public class Profile {
 
     @ManyToOne
     @JoinColumn(name = "UserID")
-    private User userId;
+    private User user;
 
     @Column(name = "FullName")
     private String fullName;
 
     @Column(name = "Photo")
     private String photo;
+
+
 }
