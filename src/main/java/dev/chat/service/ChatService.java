@@ -2,6 +2,8 @@ package dev.chat.service;
 
 import dev.chat.entity.Chat;
 import dev.chat.entity.User;
+import dev.chat.handler.ChatNotFoundException;
+import dev.chat.handler.UserNotFoundException;
 import dev.chat.repository.ChatRepository;
 import dev.chat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,22 +36,17 @@ public class ChatService {
 
     // Получить все чаты для пользователя
     public List<Chat> getAllChatsForUser(Long userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            return chatRepository.findAllByParticipantsContains(userOptional.get());
-        }
-        return null;
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with ID " + userId + " not found"));
+        return chatRepository.findAllByParticipantsContains(user);
     }
 
     // Переименовать чат
     public Chat renameChat(Long chatId, String newChatName) {
-        Optional<Chat> chatOptional = chatRepository.findById(chatId);
-        if (chatOptional.isPresent()) {
-            Chat chat = chatOptional.get();
-            chat.setChatName(newChatName);
-            return chatRepository.save(chat);
-        }
-        return null;
+        Chat chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new ChatNotFoundException("Chat with ID " + chatId + " not found"));
+        chat.setChatName(newChatName);
+        return chatRepository.save(chat);
     }
 
     // Удалить чат

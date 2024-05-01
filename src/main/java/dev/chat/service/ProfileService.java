@@ -19,6 +19,10 @@ public class ProfileService {
         return profileRepository.findById(profileId).orElse(null);
     }
 
+    public Profile createProfile(Profile profile) {
+        // Дополнительные проверки, логика и т.д. могут быть добавлены здесь
+        return profileRepository.save(profile);
+    }
     public List<Profile> getAllProfilesForUser(Long userId) {
         return profileRepository.findByUserId(userId);
     }

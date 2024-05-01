@@ -18,7 +18,7 @@ public class Chat {
     @Column(name = "ChatName")
     private String chatName;
 
-    @ManyToMany
+    @ManyToMany //можно ли сделать сохранение без сущность, чисто по айди
     @JoinTable(
             name = "ChatParticipants",
             joinColumns = @JoinColumn(name = "chat_id"),

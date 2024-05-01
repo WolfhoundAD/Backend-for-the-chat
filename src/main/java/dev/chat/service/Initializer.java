@@ -1,12 +1,9 @@
-package dev.chat.config;
+package dev.chat.service;
 
 import dev.chat.entity.Chat;
 import dev.chat.entity.Profile;
 import dev.chat.entity.User;
 import dev.chat.enums.Role;
-import dev.chat.repository.ChatRepository;
-import dev.chat.repository.ProfileRepository;
-import dev.chat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,18 +14,18 @@ import java.util.List;
 @Component
 public class Initializer {
 
-    private final ProfileRepository profileRepository;
-    private final ChatRepository chatRepository;
-    private final UserRepository userRepository;
+    private final ProfileService profileService;
+    private final ChatService chatService;
+    private final UserService userService;
 
     @Autowired
-    public Initializer(ProfileRepository profileRepository, ChatRepository chatRepository, UserRepository userRepository) {
-        this.profileRepository = profileRepository;
-        this.chatRepository = chatRepository;
-        this.userRepository = userRepository;
+    public Initializer(ProfileService profileService, ChatService chatService, UserService userService) {
+        this.profileService = profileService;
+        this.chatService = chatService;
+        this.userService = userService;
     }
 
-    @Transactional
+    @Transactional //УЗНАТЬ ДЛЯ ЧЕГО
     public void initialize() {
         // Создаем несколько пользователей
         List<User> users = createUsers();
@@ -48,7 +45,7 @@ public class Initializer {
             user.setUsername("user" + i);
             // user.setRole(STUDENT);
             user.setPassword("password" + i);
-            users.add(userRepository.save(user));
+            users.add(userService.createUser(user));
         }
 
         return users;
@@ -62,7 +59,7 @@ public class Initializer {
             profile.setFullName("Full Name " + user.getUsername());
             profile.setPhoto("Photo " + user.getUsername());
             profile.setUser(user);
-            profiles.add(profileRepository.save(profile));
+            profiles.add(profileService.createProfile(profile));
         }
 
         return profiles;
@@ -73,14 +70,16 @@ public class Initializer {
             for (int i = 1; i <= 2; i++) {
                 Chat chat = new Chat();
                 chat.setChatName("Chat " + i + " for " + profile.getFullName());
-
-                // Инициализируем список участников
                 chat.setParticipants(new ArrayList<>());
-
-                // Добавляем участника (профиль) в чат
                 chat.getParticipants().add(profile.getUser());
 
-                chatRepository.save(chat);
+                // Создаем список идентификаторов пользователей
+                List<Long> participantIds = new ArrayList<>();
+                for (User participant : chat.getParticipants()) {
+                    participantIds.add(participant.getId());
+                }
+
+                chatService.createChat(chat.getChatName(), participantIds);
             }
         }
     }

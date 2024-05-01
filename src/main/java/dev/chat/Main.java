@@ -1,6 +1,6 @@
 package dev.chat;
 
-import dev.chat.config.Initializer;
+import dev.chat.service.Initializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
