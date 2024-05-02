@@ -1,10 +1,8 @@
 package dev.chat.service;
 
+import dev.chat.dto.ChatDto;
 import dev.chat.dto.ProfileDTO;
 import dev.chat.dto.UserDTO;
-import dev.chat.entity.Chat;
-import dev.chat.entity.Profile;
-import dev.chat.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -73,6 +71,6 @@ public class Initializer {
         for (ProfileDTO profileDTO : profileDTOList) {
             participantIds.add(profileDTO.getUserID());
         }
-        Chat chat = chatService.createChat("Group Chat", participantIds);
+        ChatDto chatDto = chatService.createChat("Group Chat", participantIds);
     }
 }

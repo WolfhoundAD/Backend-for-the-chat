@@ -1,7 +1,7 @@
 package dev.chat.service;
 
+import dev.chat.dto.MessageDTO;
 import dev.chat.entity.Chat;
-import dev.chat.entity.Message;
 import dev.chat.entity.Profile;
 import dev.chat.repository.MessageRepository;
 import dev.chat.repository.ProfileRepository;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
@@ -25,31 +26,40 @@ public class MessageService {
     }
 
     // Создать сообщение в чате
-    public Message createMessage(Long chatId, Long senderId, String content) {
-        Optional<Profile> senderOptional = profileRepository.findById(senderId);
+    public MessageDTO createMessage(MessageDTO messageDTO) {
+        Optional<Profile> senderOptional = profileRepository.findById(messageDTO.getSenderID());
         if (!senderOptional.isPresent()) {
             return null;
         }
 
-        Message message = Message.builder()
-                .chat(Chat.builder().chatId(chatId).build())
+        Chat chat = Chat.builder().chatId(messageDTO.getChatID()).build();
+
+        dev.chat.entity.Message message = dev.chat.entity.Message.builder()
+                .chat(chat)
                 .sender(senderOptional.get())
-                .content(content)
+                .content(messageDTO.getContent())
                 .timestamp(LocalDate.now())
                 .build();
 
-        return messageRepository.save(message);
+        dev.chat.entity.Message savedMessage = messageRepository.save(message);
+
+        return convertToMessageDTO(savedMessage);
     }
 
     // Получить все сообщения для заданного чата
-    public List<Message> getAllMessagesForChat(Long chatId) {
-        return messageRepository.findAllByChat_ChatIdOrderByTimestamp(chatId);
+    public List<MessageDTO> getAllMessagesForChat(Long chatId) {
+        List<dev.chat.entity.Message> messages = messageRepository.findAllByChat_ChatIdOrderByTimestamp(chatId);
+        return messages.stream().map(this::convertToMessageDTO).collect(Collectors.toList());
     }
 
-    // Другие возможные функции, например:
-    // - Получить последнее сообщение в чате
-    // - Удалить сообщение
-    // - Изменить текст сообщения
-    // - Получить сообщения отправленные пользователем
-    // - И т.д.
+    // Преобразовать сущность Message в DTO
+    private MessageDTO convertToMessageDTO(dev.chat.entity.Message message) {
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setMessageID(message.getMessageId());
+        messageDTO.setChatID(message.getChat().getChatId());
+        messageDTO.setSenderID(message.getSender().getProfileId());
+        messageDTO.setContent(message.getContent());
+        messageDTO.setTimestamp(message.getTimestamp());
+        return messageDTO;
+    }
 }

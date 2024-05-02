@@ -1,6 +1,6 @@
 package dev.chat.controller.v1;
 
-import dev.chat.entity.Message;
+import dev.chat.dto.MessageDTO;
 import dev.chat.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,18 +21,18 @@ public class MessageController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Message> createMessage(@RequestParam Long chatId, @RequestParam Long senderId, @RequestParam String content) {
-        Message message = messageService.createMessage(chatId, senderId, content);
-        if (message != null) {
-            return new ResponseEntity<>(message, HttpStatus.CREATED);
+    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDTO) {
+        MessageDTO createdMessage = messageService.createMessage(messageDTO);
+        if (createdMessage != null) {
+            return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/chat/{chatId}")
-    public ResponseEntity<List<Message>> getAllMessagesForChat(@PathVariable Long chatId) {
-        List<Message> messages = messageService.getAllMessagesForChat(chatId);
+    public ResponseEntity<List<MessageDTO>> getAllMessagesForChat(@PathVariable Long chatId) {
+        List<MessageDTO> messages = messageService.getAllMessagesForChat(chatId);
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
 }

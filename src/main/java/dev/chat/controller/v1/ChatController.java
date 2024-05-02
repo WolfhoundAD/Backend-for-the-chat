@@ -1,6 +1,6 @@
 package dev.chat.controller.v1;
 
-import dev.chat.entity.Chat;
+import dev.chat.dto.ChatDto;
 import dev.chat.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,22 +21,22 @@ public class ChatController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Chat> createChat(@RequestParam String chatName, @RequestParam List<Long> participantIds) {
-        Chat chat = chatService.createChat(chatName, participantIds);
-        return new ResponseEntity<>(chat, HttpStatus.CREATED);
+    public ResponseEntity<ChatDto> createChat(@RequestParam String chatName, @RequestParam List<Long> participantIds) {
+        ChatDto chatDto = chatService.createChat(chatName, participantIds);
+        return new ResponseEntity<>(chatDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Chat>> getAllChatsForUser(@PathVariable Long userId) {
-        List<Chat> chats = chatService.getAllChatsForUser(userId);
-        return new ResponseEntity<>(chats, HttpStatus.OK);
+    public ResponseEntity<List<ChatDto>> getAllChatsForUser(@PathVariable Long userId) {
+        List<ChatDto> chatDtos = chatService.getAllChatsForUser(userId);
+        return new ResponseEntity<>(chatDtos, HttpStatus.OK);
     }
 
     @PutMapping("/{chatId}/rename")
-    public ResponseEntity<Chat> renameChat(@PathVariable Long chatId, @RequestParam String newChatName) {
-        Chat chat = chatService.renameChat(chatId, newChatName);
-        if (chat != null) {
-            return new ResponseEntity<>(chat, HttpStatus.OK);
+    public ResponseEntity<ChatDto> renameChat(@PathVariable Long chatId, @RequestParam String newChatName) {
+        ChatDto chatDto = chatService.renameChat(chatId, newChatName);
+        if (chatDto != null) {
+            return new ResponseEntity<>(chatDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
