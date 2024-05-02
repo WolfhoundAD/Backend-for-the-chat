@@ -1,86 +1,78 @@
 package dev.chat.service;
 
+import dev.chat.dto.ProfileDTO;
+import dev.chat.dto.UserDTO;
 import dev.chat.entity.Chat;
 import dev.chat.entity.Profile;
 import dev.chat.entity.User;
-import dev.chat.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class Initializer {
 
+    private final UserService userService;
     private final ProfileService profileService;
     private final ChatService chatService;
-    private final UserService userService;
 
     @Autowired
-    public Initializer(ProfileService profileService, ChatService chatService, UserService userService) {
+    public Initializer(UserService userService, ProfileService profileService, ChatService chatService) {
+        this.userService = userService;
         this.profileService = profileService;
         this.chatService = chatService;
-        this.userService = userService;
     }
 
-    @Transactional //УЗНАТЬ ДЛЯ ЧЕГО
+    @PostConstruct
     public void initialize() {
-        // Создаем несколько пользователей
-        List<User> users = createUsers();
+        // Create users
+        List<UserDTO> userDTOList = createUsers();
 
-        // Создаем профили для пользователей
-        List<Profile> profiles = createProfiles(users);
+        // Create profiles for each user
+        List<ProfileDTO> profileDTOList = createProfiles(userDTOList);
 
-        // Создаем несколько чатов для каждого профиля
-        createChats(profiles);
+        // Create a chat with participants from users
+        createChat(profileDTOList);
     }
 
-    private List<User> createUsers() {
-        List<User> users = new ArrayList<>();
+    private List<UserDTO> createUsers() {
+        List<UserDTO> userDTOList = new ArrayList<>();
 
+        // Create and save users
         for (int i = 1; i <= 3; i++) {
-            User user = new User();
-            user.setUsername("user" + i);
-            // user.setRole(STUDENT);
-            user.setPassword("password" + i);
-            users.add(userService.createUser(user));
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUsername("user" + i);
+            userDTO.setPassword("password" + i);
+            userDTO.setRole("ADMIN");
+            userDTOList.add(userService.createUser(userDTO));
         }
 
-        return users;
+        return userDTOList;
     }
 
-    private List<Profile> createProfiles(List<User> users) {
-        List<Profile> profiles = new ArrayList<>();
+    private List<ProfileDTO> createProfiles(List<UserDTO> userDTOList) {
+        List<ProfileDTO> profileDTOList = new ArrayList<>();
 
-        for (User user : users) {
-            Profile profile = new Profile();
-            profile.setFullName("Full Name " + user.getUsername());
-            profile.setPhoto("Photo " + user.getUsername());
-            profile.setUser(user);
-            profiles.add(profileService.createProfile(profile));
+        // Create and save profiles for each user
+        for (UserDTO userDTO : userDTOList) {
+            ProfileDTO profileDTO = new ProfileDTO();
+            profileDTO.setUserID(userDTO.getUserID());
+            profileDTO.setFullName("Full Name " + userDTO.getUsername());
+            profileDTO.setPhoto("profile_photo_" + userDTO.getUserID() + ".jpg");
+            profileDTOList.add(profileService.createProfile(profileDTO));
         }
 
-        return profiles;
+        return profileDTOList;
     }
 
-    private void createChats(List<Profile> profiles) {
-        for (Profile profile : profiles) {
-            for (int i = 1; i <= 2; i++) {
-                Chat chat = new Chat();
-                chat.setChatName("Chat " + i + " for " + profile.getFullName());
-                chat.setParticipants(new ArrayList<>());
-                chat.getParticipants().add(profile.getUser());
-
-                // Создаем список идентификаторов пользователей
-                List<Long> participantIds = new ArrayList<>();
-                for (User participant : chat.getParticipants()) {
-                    participantIds.add(participant.getId());
-                }
-
-                chatService.createChat(chat.getChatName(), participantIds);
-            }
+    private void createChat(List<ProfileDTO> profileDTOList) {
+        List<Long> participantIds = new ArrayList<>();
+        for (ProfileDTO profileDTO : profileDTOList) {
+            participantIds.add(profileDTO.getUserID());
         }
+        Chat chat = chatService.createChat("Group Chat", participantIds);
     }
 }
