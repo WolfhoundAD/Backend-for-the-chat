@@ -8,6 +8,6 @@ public class ProfileDTO {
     private Long profileID;
     private Long userID;
     private String fullName;
-    private String photo;
+    private String photoUrl;
 }
 

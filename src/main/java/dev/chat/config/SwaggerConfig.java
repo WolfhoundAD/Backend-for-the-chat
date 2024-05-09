@@ -30,8 +30,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Product Manager API")
-                .description("API for managing customers and products")
+                .title("CHAT")
+                .description("API for CHAT")
                 .version("1.0")
                 .build();
     }

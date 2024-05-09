@@ -7,6 +7,11 @@ spring:
     hibernate:
       ddl-auto: create
 
-
 server:
   port: 8081
+
+minio:
+  endpoint: http://localhost:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: chat-photos

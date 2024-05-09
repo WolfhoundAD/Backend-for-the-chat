@@ -59,8 +59,8 @@ public class Initializer {
             ProfileDTO profileDTO = new ProfileDTO();
             profileDTO.setUserID(userDTO.getUserID());
             profileDTO.setFullName("Full Name " + userDTO.getUsername());
-            profileDTO.setPhoto("profile_photo_" + userDTO.getUserID() + ".jpg");
-            profileDTOList.add(profileService.createProfile(profileDTO));
+         //   profileDTO.setPhoto("profile_photo_" + userDTO.getUserID() + ".jpg");
+         //   profileDTOList.add(profileService.createProfile(profileDTO));
         }
 
         return profileDTOList;

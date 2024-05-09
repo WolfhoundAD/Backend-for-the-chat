@@ -22,8 +22,8 @@ public class Profile {
     @Column(name = "FullName")
     private String fullName;
 
-    @Column(name = "Photo")
-    private String photo;
+    @Column(name = "PhotoUrl")
+    private String photoUrl;
 
 
 }
