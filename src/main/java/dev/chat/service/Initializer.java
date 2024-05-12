@@ -5,8 +5,11 @@ import dev.chat.dto.ProfileDTO;
 import dev.chat.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import dev.chat.service.EmptyMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,13 +57,23 @@ public class Initializer {
     private List<ProfileDTO> createProfiles(List<UserDTO> userDTOList) {
         List<ProfileDTO> profileDTOList = new ArrayList<>();
 
-        // Create and save profiles for each user
+        // Создание и сохранение профилей для каждого пользователя
         for (UserDTO userDTO : userDTOList) {
             ProfileDTO profileDTO = new ProfileDTO();
             profileDTO.setUserID(userDTO.getUserID());
             profileDTO.setFullName("Full Name " + userDTO.getUsername());
-         //   profileDTO.setPhoto("profile_photo_" + userDTO.getUserID() + ".jpg");
-         //   profileDTOList.add(profileService.createProfile(profileDTO));
+            profileDTO.setPhotoUrl("profile_photo_" + userDTO.getUserID() + ".jpg");
+
+            // Создание пустого MultipartFile
+            MultipartFile emptyFile = new EmptyMultipartFile();
+
+            try {
+                profileDTOList.add(profileService.createProfile(profileDTO, emptyFile));
+            } catch (IOException e) {
+                // Обработка исключения IOException
+                e.printStackTrace();
+                // Возможно, вы захотите добавить логирование или другое поведение здесь
+            }
         }
 
         return profileDTOList;
