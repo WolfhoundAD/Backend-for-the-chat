@@ -15,4 +15,5 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
     //todo jpql
     List<Chat> findAllByParticipantsContains(User user);
+    List<Chat> findAllByParticipantsContaining(User participant);
 }
