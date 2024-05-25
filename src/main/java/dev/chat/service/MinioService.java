@@ -21,6 +21,7 @@ public class MinioService {
         this.bucketName = bucketName;
 
         try {
+            //todo почитай, почему нельзя в конструкторе делать долгие запросы. postconstruct, onapplicationstart
             if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
             }

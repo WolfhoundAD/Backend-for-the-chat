@@ -10,6 +10,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "ChatParticipants")
 public class ChatParticipant {
+
+    //todo composite key?
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatParticipantId;

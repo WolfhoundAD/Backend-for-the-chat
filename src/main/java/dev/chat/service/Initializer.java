@@ -42,10 +42,9 @@ public class Initializer {
     private List<UserDTO> createUsers() {
         List<UserDTO> userDTOList = new ArrayList<>();
 
-        // Create and save users
         for (int i = 1; i <= 3; i++) {
             UserDTO userDTO = new UserDTO();
-            userDTO.setUsername("user" + i);
+            userDTO.setUsername("user0000" + i);
             userDTO.setPassword("password" + i);
             userDTO.setRole("ADMIN");
             userDTOList.add(userService.createUser(userDTO));
@@ -57,7 +56,6 @@ public class Initializer {
     private List<ProfileDTO> createProfiles(List<UserDTO> userDTOList) {
         List<ProfileDTO> profileDTOList = new ArrayList<>();
 
-        // Создание и сохранение профилей для каждого пользователя
         for (UserDTO userDTO : userDTOList) {
             ProfileDTO profileDTO = new ProfileDTO();
             profileDTO.setUserID(userDTO.getUserID());
@@ -70,9 +68,7 @@ public class Initializer {
             try {
                 profileDTOList.add(profileService.createProfile(profileDTO, emptyFile));
             } catch (IOException e) {
-                // Обработка исключения IOException
                 e.printStackTrace();
-                // Возможно, вы захотите добавить логирование или другое поведение здесь
             }
         }
 

@@ -23,5 +23,6 @@ public class ReadStatus {
     private Profile profileId;
 
     @Column(name = "IsRead")
+    //todo почитать boolean vs Boolean
     private boolean isRead;
 }

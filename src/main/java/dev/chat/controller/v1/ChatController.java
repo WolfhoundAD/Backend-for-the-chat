@@ -21,9 +21,9 @@ public class ChatController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ChatDto> createChat(@RequestParam String chatName, @RequestParam List<Long> participantIds) {
-        ChatDto chatDto = chatService.createChat(chatName, participantIds);
-        return new ResponseEntity<>(chatDto, HttpStatus.CREATED);
+
+    public ChatDto createChat(@RequestParam String chatName, @RequestParam List<Long> participantIds) {
+        return chatService.createChat(chatName, participantIds);
     }
 
     @GetMapping("/user/{userId}")

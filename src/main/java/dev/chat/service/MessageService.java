@@ -28,6 +28,8 @@ public class MessageService {
     // Создать сообщение в чате
     public MessageDTO createMessage(MessageDTO messageDTO) {
         Optional<Profile> senderOptional = profileRepository.findById(messageDTO.getSenderID());
+
+        //todo exception handler
         if (!senderOptional.isPresent()) {
             return null;
         }
@@ -36,6 +38,7 @@ public class MessageService {
 
         dev.chat.entity.Message message = dev.chat.entity.Message.builder()
                 .chat(chat)
+                //todo поменяй для сохранения нужен только id
                 .sender(senderOptional.get())
                 .content(messageDTO.getContent())
                 .timestamp(LocalDate.now())

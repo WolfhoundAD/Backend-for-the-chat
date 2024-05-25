@@ -34,6 +34,8 @@ public class ProfileService {
         return profileRepository.findByUserId(userId);
     }
 
+
+    //todo транзакция на сохранение файла и работу с бд
     public ProfileDTO createProfile(ProfileDTO profileDTO, MultipartFile photoFile) throws IOException {
         Profile profile = convertToProfile(profileDTO);
 
@@ -41,7 +43,7 @@ public class ProfileService {
             String photoFileName = UUID.randomUUID().toString() + StringUtils.cleanPath(photoFile.getOriginalFilename());
             try (InputStream photoInputStream = photoFile.getInputStream()) {
                 minioService.uploadFile(photoInputStream, photoFileName, photoFile.getContentType());
-                profile.setPhotoUrl(photoFileName); // Сохраняем путь к фотографии в базе данных
+                profile.setPhotoUrl(photoFileName); // Сохраняется путь к фотографии в базе данных
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException("Failed to upload photo to MinIO");
@@ -57,8 +59,8 @@ public class ProfileService {
 
     private Profile convertToProfile(ProfileDTO profileDTO) {
         Profile profile = new Profile();
-        profile.setUser(new User()); // используем конструктор без аргументов
-        profile.getUser().setId(profileDTO.getUserID()); // устанавливаем id
+        profile.setUser(new User());
+        profile.getUser().setId(profileDTO.getUserID());
         profile.setFullName(profileDTO.getFullName());
         profile.setPhotoUrl(profileDTO.getPhotoUrl());
         return profile;

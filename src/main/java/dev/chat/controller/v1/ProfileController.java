@@ -23,7 +23,7 @@ public class ProfileController {
         this.profileService = profileService;
     }
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ProfileDTO> createProfile(
+    public ProfileDTO createProfile(
             @RequestParam("photo") MultipartFile photo,
             @RequestParam("profileDTO") String profileDTOJson) throws IOException {
 
@@ -31,13 +31,11 @@ public class ProfileController {
         ObjectMapper objectMapper = new ObjectMapper();
         ProfileDTO profileDTO = objectMapper.readValue(profileDTOJson, ProfileDTO.class);
 
-        ProfileDTO createdProfile = profileService.createProfile(profileDTO, photo);
-        return new ResponseEntity<>(createdProfile, HttpStatus.CREATED);
+        return profileService.createProfile(profileDTO, photo);
     }
 
     @DeleteMapping("/{profileId}")
-    public ResponseEntity<Void> deleteProfile(@PathVariable Long profileId) {
+    public void deleteProfile(@PathVariable Long profileId) {
         profileService.deleteProfile(profileId);
-        return ResponseEntity.noContent().build();
     }
 }

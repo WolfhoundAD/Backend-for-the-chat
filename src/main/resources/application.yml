@@ -3,6 +3,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/chatBD
     username: postgres
     password: 192837465
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+    drop-first: false
   jpa:
     hibernate:
       ddl-auto: create

@@ -22,7 +22,8 @@ public class Profile {
     @Column(name = "FullName")
     private String fullName;
 
-    @Column(name = "PhotoUrl")
+    //todo
+    @Column(name = "photo_url")
     private String photoUrl;
 
 

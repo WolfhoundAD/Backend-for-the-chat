@@ -26,5 +26,6 @@ public class User {
     private String role;
 
     @Column(name = "LastLogin")
+    //todo datetime&
     private LocalDate lastLogin;
 }
