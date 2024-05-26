@@ -51,7 +51,7 @@ public class MessageService {
 
     // Получить все сообщения для заданного чата
     public List<MessageDTO> getAllMessagesForChat(Long chatId) {
-        List<dev.chat.entity.Message> messages = messageRepository.findAllByChat_ChatIdOrderByTimestamp(chatId);
+        List<dev.chat.entity.Message> messages = messageRepository.findMessagesByChatId(chatId);
         return messages.stream().map(messageMapper::messageToMessageDTO).collect(Collectors.toList());
     }
 }

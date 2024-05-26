@@ -22,7 +22,6 @@ public class Profile {
     @Column(name = "full_name")
     private String fullName;
 
-    //todo
     @Column(name = "photo_url")
     private String photoUrl;
 

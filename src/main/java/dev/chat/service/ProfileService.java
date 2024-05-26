@@ -34,7 +34,7 @@ public class ProfileService {
     }
 
     public List<Profile> getAllProfilesForUser(Long userId) {
-        return profileRepository.findByUserId(userId);
+        return profileRepository.findProfilesByUserId(userId);
     }
 
     //todo транзакция на сохранение файла и работу с бд

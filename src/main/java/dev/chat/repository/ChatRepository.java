@@ -12,8 +12,6 @@ import java.util.List;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-
-    //todo jpql
-    List<Chat> findAllByParticipantsContains(User user);
-    List<Chat> findAllByParticipantsContaining(User participant);
+    @Query("SELECT c FROM Chat c JOIN c.participants p WHERE p = :participant")
+    List<Chat> findAllByParticipantsContaining(@Param("participant") User participant);
 }
