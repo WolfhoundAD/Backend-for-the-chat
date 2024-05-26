@@ -3,8 +3,6 @@ package dev.chat.controller.v1;
 import dev.chat.dto.ChatDto;
 import dev.chat.service.ChatService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,24 +20,17 @@ public class ChatController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ChatDto>> getAllChatsForUser(@PathVariable Long userId) {
-        List<ChatDto> chatDtos = chatService.getAllChatsForUser(userId);
-        return new ResponseEntity<>(chatDtos, HttpStatus.OK);
+    public List<ChatDto> getAllChatsForUser(@PathVariable Long userId) {
+        return chatService.getAllChatsForUser(userId);
     }
 
     @PutMapping("/{chatId}/rename")
-    public ResponseEntity<ChatDto> renameChat(@PathVariable Long chatId, @RequestParam String newChatName) {
-        ChatDto chatDto = chatService.renameChat(chatId, newChatName);
-        if (chatDto != null) {
-            return new ResponseEntity<>(chatDto, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ChatDto renameChat(@PathVariable Long chatId, @RequestParam String newChatName) {
+        return chatService.renameChat(chatId, newChatName);
     }
 
     @DeleteMapping("/{chatId}")
-    public ResponseEntity<Void> deleteChat(@PathVariable Long chatId) {
+    public void deleteChat(@PathVariable Long chatId) {
         chatService.deleteChat(chatId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

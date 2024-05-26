@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-//todo data?
 @Getter
 @Setter
 @Builder

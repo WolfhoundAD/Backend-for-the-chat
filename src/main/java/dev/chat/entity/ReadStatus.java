@@ -23,6 +23,6 @@ public class ReadStatus {
     private Profile profileId;
 
     @Column(name = "is_read")
-    //todo почитать boolean vs Boolean
+    //todo почитать boolean vs Boolean - оставить boolean, т.к. null не нужен
     private boolean isRead;
 }

@@ -17,18 +17,12 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/create")
-    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDTO) {
-        MessageDTO createdMessage = messageService.createMessage(messageDTO);
-        if (createdMessage != null) {
-            return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public MessageDTO createMessage(@RequestBody MessageDTO messageDTO) {
+        return messageService.createMessage(messageDTO);
     }
 
     @GetMapping("/chat/{chatId}")
-    public ResponseEntity<List<MessageDTO>> getAllMessagesForChat(@PathVariable Long chatId) {
-        List<MessageDTO> messages = messageService.getAllMessagesForChat(chatId);
-        return new ResponseEntity<>(messages, HttpStatus.OK);
+    public List<MessageDTO> getAllMessagesForChat(@PathVariable Long chatId) {
+        return messageService.getAllMessagesForChat(chatId);
     }
 }

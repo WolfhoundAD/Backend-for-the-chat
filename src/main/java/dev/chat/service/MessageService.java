@@ -2,6 +2,7 @@ package dev.chat.service;
 
 import dev.chat.dto.MessageDTO;
 import dev.chat.entity.Chat;
+import dev.chat.entity.Message;
 import dev.chat.entity.Profile;
 import dev.chat.mapper.MessageMapper;
 import dev.chat.repository.MessageRepository;
@@ -36,22 +37,16 @@ public class MessageService {
             return null;
         }
 
-        Chat chat = Chat.builder().chatId(messageDTO.getChatID()).build();
-        dev.chat.entity.Message message = dev.chat.entity.Message.builder()
-                .chat(chat)
-                //todo поменяй для сохранения нужен только id
-                .sender(senderOptional.get())
-                .content(messageDTO.getContent())
-                .timestamp(LocalDate.now())
-                .build();
+        Message message = MessageMapper.INSTANCE.messageDTOToMessage(messageDTO);
+        message.setSender(senderOptional.get());
 
-        dev.chat.entity.Message savedMessage = messageRepository.save(message);
-        return messageMapper.messageToMessageDTO(savedMessage);
+        Message savedMessage = messageRepository.save(message);
+        return MessageMapper.INSTANCE.messageToMessageDTO(savedMessage);
     }
 
     // Получить все сообщения для заданного чата
     public List<MessageDTO> getAllMessagesForChat(Long chatId) {
-        List<dev.chat.entity.Message> messages = messageRepository.findMessagesByChatId(chatId);
+        List<Message> messages = messageRepository.findMessagesByChatId(chatId);
         return messages.stream().map(messageMapper::messageToMessageDTO).collect(Collectors.toList());
     }
 }
