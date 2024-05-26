@@ -6,51 +6,51 @@
 
     <!-- Создание таблицы Users -->
     <changeSet author="WolfhoundAD" id="1">
-        <createTable tableName="Users">
+        <createTable tableName="users">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="Username" type="varchar(255)">
+            <column name="username" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="Password" type="varchar(255)">
+            <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="Role" type="varchar(50)">
+            <column name="role" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="LastLogin" type="date"/>
+            <column name="last_login" type="date"/>
         </createTable>
     </changeSet>
 
     <!-- Создание таблицы Profile -->
     <changeSet author="WolfhoundAD" id="2">
-        <createTable tableName="Profile">
+        <createTable tableName="profile">
             <column name="profileId" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="UserID" type="bigint">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="FullName" type="varchar(255)">
+            <column name="full_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="photo_url" type="varchar(255)"/>
         </createTable>
-        <addForeignKeyConstraint baseTableName="Profile"
-                                 baseColumnNames="UserID"
-                                 referencedTableName="Users"
+        <addForeignKeyConstraint baseTableName="profile"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
                                  referencedColumnNames="id"
-                                 constraintName="fk_Profile_User"/>
+                                 constraintName="fk_profile_user"/>
     </changeSet>
 
     <!-- Создание таблицы Chats -->
     <changeSet author="WolfhoundAD" id="3">
-        <createTable tableName="Chats">
+        <createTable tableName="chats">
             <column name="chatId" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="ChatName" type="varchar(255)">
+            <column name="chat_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -58,7 +58,7 @@
 
     <!-- Создание таблицы ChatParticipants -->
     <changeSet author="WolfhoundAD" id="4">
-        <createTable tableName="ChatParticipants">
+        <createTable tableName="chat_participants">
             <column name="chatParticipantId" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -69,93 +69,93 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="ChatParticipants"
+        <addForeignKeyConstraint baseTableName="chat_participants"
                                  baseColumnNames="chat_id"
-                                 referencedTableName="Chats"
+                                 referencedTableName="chats"
                                  referencedColumnNames="chatId"
-                                 constraintName="fk_ChatParticipants_Chat"/>
-        <addForeignKeyConstraint baseTableName="ChatParticipants"
+                                 constraintName="fk_chat_participants_chat"/>
+        <addForeignKeyConstraint baseTableName="chat_participants"
                                  baseColumnNames="user_id"
-                                 referencedTableName="Users"
+                                 referencedTableName="users"
                                  referencedColumnNames="id"
-                                 constraintName="fk_ChatParticipants_User"/>
+                                 constraintName="fk_chat_participants_user"/>
     </changeSet>
 
     <!-- Создание таблицы Messages -->
     <changeSet author="WolfhoundAD" id="5">
-        <createTable tableName="Messages">
+        <createTable tableName="messages">
             <column name="messageId" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="ChatID" type="bigint">
+            <column name="chat_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="SenderID" type="bigint">
+            <column name="sender_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="Content" type="varchar(255)">
+            <column name="content" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="Timestamp" type="date"/>
+            <column name="timestamp" type="date"/>
         </createTable>
-        <addForeignKeyConstraint baseTableName="Messages"
-                                 baseColumnNames="ChatID"
-                                 referencedTableName="Chats"
+        <addForeignKeyConstraint baseTableName="messages"
+                                 baseColumnNames="chat_id"
+                                 referencedTableName="chats"
                                  referencedColumnNames="chatId"
-                                 constraintName="fk_Messages_Chat"/>
-        <addForeignKeyConstraint baseTableName="Messages"
-                                 baseColumnNames="SenderID"
-                                 referencedTableName="Profile"
+                                 constraintName="fk_messages_chat"/>
+        <addForeignKeyConstraint baseTableName="messages"
+                                 baseColumnNames="sender_id"
+                                 referencedTableName="profile"
                                  referencedColumnNames="profileId"
-                                 constraintName="fk_Messages_Profile"/>
+                                 constraintName="fk_messages_profile"/>
     </changeSet>
 
     <!-- Создание таблицы Attachments -->
     <changeSet author="WolfhoundAD" id="6">
-        <createTable tableName="Attachments">
+        <createTable tableName="attachments">
             <column name="attachmentId" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="message_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="FilePath" type="varchar(255)">
+            <column name="file_path" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="Attachments"
+        <addForeignKeyConstraint baseTableName="attachments"
                                  baseColumnNames="message_id"
-                                 referencedTableName="Messages"
+                                 referencedTableName="messages"
                                  referencedColumnNames="messageId"
-                                 constraintName="fk_Attachments_Message"/>
+                                 constraintName="fk_attachments_message"/>
     </changeSet>
 
     <!-- Создание таблицы ReadStatus -->
     <changeSet author="WolfhoundAD" id="7">
-        <createTable tableName="ReadStatus">
+        <createTable tableName="read_status">
             <column name="readStatusId" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="MessageID" type="bigint">
+            <column name="message_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="ProfileID" type="bigint">
+            <column name="profile_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="IsRead" type="boolean">
+            <column name="is_read" type="boolean">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="ReadStatus"
-                                 baseColumnNames="MessageID"
-                                 referencedTableName="Messages"
+        <addForeignKeyConstraint baseTableName="read_status"
+                                 baseColumnNames="message_id"
+                                 referencedTableName="messages"
                                  referencedColumnNames="messageId"
-                                 constraintName="fk_ReadStatus_Message"/>
-        <addForeignKeyConstraint baseTableName="ReadStatus"
-                                 baseColumnNames="ProfileID"
-                                 referencedTableName="Profile"
+                                 constraintName="fk_read_status_message"/>
+        <addForeignKeyConstraint baseTableName="read_status"
+                                 baseColumnNames="profile_id"
+                                 referencedTableName="profile"
                                  referencedColumnNames="profileId"
-                                 constraintName="fk_ReadStatus_Profile"/>
+                                 constraintName="fk_read_status_profile"/>
     </changeSet>
 
 </databaseChangeLog>

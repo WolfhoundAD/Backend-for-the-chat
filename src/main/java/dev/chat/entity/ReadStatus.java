@@ -8,21 +8,21 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ReadStatus")
+@Table(name = "read_status")
 public class ReadStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long readStatusId;
 
     @ManyToOne
-    @JoinColumn(name = "MessageID")
+    @JoinColumn(name = "message_id")
     private Message messageId;
 
     @ManyToOne
-    @JoinColumn(name = "ProfileID")
+    @JoinColumn(name = "profile_id")
     private Profile profileId;
 
-    @Column(name = "IsRead")
+    @Column(name = "is_read")
     //todo почитать boolean vs Boolean
     private boolean isRead;
 }

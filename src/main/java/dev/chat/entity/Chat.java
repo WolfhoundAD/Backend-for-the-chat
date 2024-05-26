@@ -9,18 +9,18 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Chats")
+@Table(name = "chats")
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;
 
-    @Column(name = "ChatName")
+    @Column(name = "chat_name")
     private String chatName;
 
     @ManyToMany //можно ли сделать сохранение без сущность, чисто по айди
     @JoinTable(
-            name = "ChatParticipants",
+            name = "chat_participants",
             joinColumns = @JoinColumn(name = "chat_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )

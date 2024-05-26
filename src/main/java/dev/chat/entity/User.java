@@ -10,22 +10,22 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Username")
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "Password")
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "Role")
+    @Column(name = "role")
     private String role;
 
-    @Column(name = "LastLogin")
+    @Column(name = "last_login")
     //todo datetime&
     private LocalDate lastLogin;
 }

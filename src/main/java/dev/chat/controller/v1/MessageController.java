@@ -2,7 +2,7 @@ package dev.chat.controller.v1;
 
 import dev.chat.dto.MessageDTO;
 import dev.chat.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,15 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/message")
-//todo allargsconstructor
+@AllArgsConstructor
 public class MessageController {
 
     private final MessageService messageService;
-
-    @Autowired
-    public MessageController(MessageService messageService) {
-        this.messageService = messageService;
-    }
 
     @PostMapping("/create")
     public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDTO) {

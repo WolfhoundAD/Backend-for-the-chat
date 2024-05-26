@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ChatParticipants")
+@Table(name = "chat_participants")
 public class ChatParticipant {
 
     //todo composite key?

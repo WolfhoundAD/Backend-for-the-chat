@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Attachments")
+@Table(name = "attachments")
 public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +18,6 @@ public class Attachment {
     @JoinColumn(name = "message_id")
     private Message message;
 
-    @Column(name = "FilePath")
+    @Column(name = "file_path")
     private String filePath;
 }
