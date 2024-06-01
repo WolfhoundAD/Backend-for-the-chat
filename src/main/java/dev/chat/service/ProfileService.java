@@ -1,13 +1,12 @@
 package dev.chat.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import dev.chat.dto.ProfileDTO;
 import dev.chat.entity.Profile;
-import dev.chat.entity.User;
 import dev.chat.repository.ProfileRepository;
-import dev.chat.service.MinioService;
 import dev.chat.mapper.ProfileMapper;
 
 import java.io.IOException;
@@ -37,7 +36,8 @@ public class ProfileService {
         return profileRepository.findProfilesByUserId(userId);
     }
 
-    //todo транзакция на сохранение файла и работу с бд
+    //todo транзакция на сохранение файла и работу с бд - сделал
+    @Transactional
     public ProfileDTO createProfile(ProfileDTO profileDTO, MultipartFile photoFile) throws IOException {
         Profile profile = profileMapper.profileDTOToProfile(profileDTO);
 

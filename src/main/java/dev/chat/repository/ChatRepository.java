@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
+
     @Query("SELECT c FROM Chat c JOIN c.participants p WHERE p = :participant")
     List<Chat> findAllByParticipantsContaining(@Param("participant") User participant);
 }

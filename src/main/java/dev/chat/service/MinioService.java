@@ -3,25 +3,24 @@ package dev.chat.service;
 import io.minio.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
+import javax.annotation.PostConstruct;
 import java.io.InputStream;
-import java.util.UUID;
 
 @Service
 public class MinioService {
 
     private final MinioClient minioClient;
 
-     @Value("${minio.bucketName}")
+    @Value("${minio.bucketName}")
     private String bucketName;
 
-    public MinioService(MinioClient minioClient, @Value("${minio.bucketName}") String bucketName) {
+    public MinioService(MinioClient minioClient) {
         this.minioClient = minioClient;
-        this.bucketName = bucketName;
-
+    }
+    //todo сделал PostConstruct
+    @PostConstruct
+    public void init() {
         try {
-            //todo почитай, почему нельзя в конструкторе делать долгие запросы. postconstruct, onapplicationstart
             if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
             }
