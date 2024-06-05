@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.InputStream;
-
+//docker run -p 9000:9000 -p 9001:9001 minio/minio server /data —console-address ":9001"
 @Service
 public class MinioService {
 
@@ -17,7 +17,6 @@ public class MinioService {
     public MinioService(MinioClient minioClient) {
         this.minioClient = minioClient;
     }
-    //todo сделал PostConstruct
     @PostConstruct
     public void init() {
         try {

@@ -36,7 +36,7 @@ public class ProfileService {
         return profileRepository.findProfilesByUserId(userId);
     }
 
-    //todo транзакция на сохранение файла и работу с бд - сделал
+    //todo транзакция на сохранение файла и работу с бд - протестировать
     @Transactional
     public ProfileDTO createProfile(ProfileDTO profileDTO, MultipartFile photoFile) throws IOException {
         Profile profile = profileMapper.profileDTOToProfile(profileDTO);

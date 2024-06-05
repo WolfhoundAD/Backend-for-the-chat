@@ -16,7 +16,7 @@ public interface MessageMapper {
             @Mapping(source = "chatID", target = "chat.chatId"),
             @Mapping(source = "senderID", target = "sender.profileId"),
             @Mapping(source = "content", target = "content"),
-            @Mapping(source = "timestamp", target = "timestamp")
+            @Mapping(source = "timestamp", target = "timestamp") //todo timestamp заменить на cratedate
     })
     Message messageDTOToMessage(MessageDTO messageDTO);
 
