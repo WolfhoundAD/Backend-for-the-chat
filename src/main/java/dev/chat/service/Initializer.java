@@ -44,13 +44,15 @@ public class Initializer {
 
         for (int i = 1; i <= 3; i++) {
             UserDTO userDTO = new UserDTO();
-            userDTO.setUsername("user0000" + i);
+            userDTO.setUsername("user" + i);
             userDTO.setPassword("password" + i);
             userDTO.setRole("ADMIN");
             userDTOList.add(userService.createUser(userDTO));
         }
 
+
         return userDTOList;
+
     }
 
     private List<ProfileDTO> createProfiles(List<UserDTO> userDTOList) {
