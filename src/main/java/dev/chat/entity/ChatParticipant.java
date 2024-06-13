@@ -3,7 +3,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
-//todo composite key - сделал, посмотреть
 @Entity
 @Getter
 @Setter
@@ -24,7 +23,6 @@ public class ChatParticipant {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // Вложенный класс для представления композиционного ключа
     @Getter
     @Setter
     @NoArgsConstructor
