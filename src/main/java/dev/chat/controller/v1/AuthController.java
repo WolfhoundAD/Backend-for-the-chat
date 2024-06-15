@@ -4,6 +4,8 @@ import dev.chat.dto.UserDTO;
 import dev.chat.service.CustomUserDetailsService;
 import dev.chat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> loginUser(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(userDTO.getUsername());
         if (userDetails != null && passwordEncoder.matches(userDTO.getPassword(), userDetails.getPassword())) {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -48,9 +50,12 @@ public class AuthController {
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "User logged in successfully");
-            return response;
+            response.put("token", "example_token");  // Добавьте токен для примера
+            return ResponseEntity.ok(response);
         } else {
-            throw new RuntimeException("Invalid username or password");
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
 }

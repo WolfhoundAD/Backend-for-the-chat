@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                // .loginPage("/login")
                 .defaultSuccessUrl("/swagger-ui/index.html", true)
                 .permitAll()
                 .and()
