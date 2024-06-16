@@ -9,10 +9,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Configuration
@@ -42,14 +44,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                // .loginPage("/login")
-                .defaultSuccessUrl("/swagger-ui/index.html", true)
-                .permitAll()
+                .exceptionHandling()
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setContentType("application/json");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getOutputStream().println("{ \"error\": \"Unauthorized\" }");
+                })
                 .and()
                 .logout()
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setContentType("application/json");
+                    response.getWriter().write("{ \"message\": \"Logout successful\" }");
+                    response.setStatus(HttpServletResponse.SC_OK);
+                })
                 .permitAll();
+
+        http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public CustomAuthenticationFilter authenticationFilter() throws Exception {
+        CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManager());
+        filter.setFilterProcessesUrl("/login");
+        return filter;
     }
      @Bean
     public CorsConfigurationSource corsConfigurationSource() {
