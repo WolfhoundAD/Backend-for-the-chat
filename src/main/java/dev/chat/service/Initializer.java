@@ -36,7 +36,7 @@ public class Initializer {
         List<ProfileDTO> profileDTOList = createProfiles(userDTOList);
 
         // Create a chat with participants from users
-        createChat(profileDTOList);
+        //createChat(profileDTOList);
     }
 
     private List<UserDTO> createUsers() {
@@ -77,11 +77,11 @@ public class Initializer {
         return profileDTOList;
     }
 
-    private void createChat(List<ProfileDTO> profileDTOList) {
+    /*private void createChat(List<ProfileDTO> profileDTOList) {
         List<Long> participantIds = new ArrayList<>();
         for (ProfileDTO profileDTO : profileDTOList) {
             participantIds.add(profileDTO.getUserID());
         }
         ChatDto chatDto = chatService.createChat("Group Chat", participantIds);
-    }
+    }*/
 }

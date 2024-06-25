@@ -1,5 +1,5 @@
 package dev.chat.config;
-
+/*
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.chat.dto.UserDTO;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +20,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             UserDTO creds = new ObjectMapper().readValue(request.getInputStream(), UserDTO.class);
-
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     creds.getUsername(), creds.getPassword(), new ArrayList<>());
 
@@ -44,5 +43,4 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
-
-
+*/

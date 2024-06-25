@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5432/chatBD
+    url: jdbc:postgresql://localhost:5432/chatBD #jdbc:postgresql://postgres:5432/chatBD
     username: postgres
     password: 192837465
   liquibase:
@@ -14,7 +14,7 @@ server:
   port: 8081
 
 minio:
-  endpoint: http://minio:9000
+  endpoint: http://localhost:9000 #endpoint: http://minio:9000
   accessKey: minioadmin
   secretKey: minioadmin
   bucketName: chat-photos

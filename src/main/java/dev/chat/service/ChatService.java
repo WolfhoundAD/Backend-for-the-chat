@@ -2,15 +2,18 @@ package dev.chat.service;
 
 import dev.chat.dto.ChatDto;
 import dev.chat.entity.Chat;
+import dev.chat.entity.ChatParticipant;
 import dev.chat.entity.User;
 import dev.chat.handler.ChatNotFoundException;
 import dev.chat.handler.UserNotFoundException;
 import dev.chat.mapper.ChatMapper;
+import dev.chat.repository.ChatParticipantRepository;
 import dev.chat.repository.ChatRepository;
 import dev.chat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,23 +22,27 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
+    private final ChatParticipantRepository chatParticipantRepository;
     private final ChatMapper chatMapper;
 
     @Autowired
-    public ChatService(ChatRepository chatRepository, UserRepository userRepository, ChatMapper chatMapper) {
+    public ChatService(ChatRepository chatRepository, UserRepository userRepository, ChatParticipantRepository chatParticipantRepository, ChatMapper chatMapper) {
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
+        this.chatParticipantRepository = chatParticipantRepository;
         this.chatMapper = chatMapper;
     }
+    @Transactional
+    public ChatDto createChat(ChatDto chatDto) {
+        Chat chat = chatMapper.chatDTOToChat(chatDto);
+        List<User> participants = userRepository.findAllById(chatDto.getParticipantIds());
+        chat.setParticipants(participants);
 
-    public ChatDto createChat(String chatName, List<Long> participantIds) {
-        List<User> participants = userRepository.findAllById(participantIds);
-        Chat chat = Chat.builder()
-                .chatName(chatName)
-                .participants(participants)
-                .build();
-        Chat savedChat = chatRepository.save(chat);
-        return chatMapper.chatToChatDTO(savedChat);
+        chat = chatRepository.save(chat);
+        System.out.println("Chat saved: " + chat);
+
+        return chatMapper.chatToChatDTO(chat);
+        
     }
     //todo добавить пагинацию
     public List<ChatDto> getAllChatsForUser(Long userId) {

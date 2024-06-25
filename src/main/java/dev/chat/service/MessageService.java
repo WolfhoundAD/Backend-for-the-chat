@@ -1,7 +1,6 @@
 package dev.chat.service;
 
 import dev.chat.dto.MessageDTO;
-import dev.chat.entity.Chat;
 import dev.chat.entity.Message;
 import dev.chat.entity.Profile;
 import dev.chat.mapper.MessageMapper;
@@ -10,14 +9,12 @@ import dev.chat.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
-
 
     private final MessageRepository messageRepository;
     private final ProfileRepository profileRepository;
@@ -33,18 +30,16 @@ public class MessageService {
     public MessageDTO createMessage(MessageDTO messageDTO) {
         Optional<Profile> senderOptional = profileRepository.findById(messageDTO.getSenderID());
         if (!senderOptional.isPresent()) {
-            //todo exception handler
-            return null;
+            throw new RuntimeException("Sender not found");
         }
 
-        Message message = MessageMapper.INSTANCE.messageDTOToMessage(messageDTO);
+        Message message = messageMapper.messageDTOToMessage(messageDTO);
         message.setSender(senderOptional.get());
 
         Message savedMessage = messageRepository.save(message);
-        return MessageMapper.INSTANCE.messageToMessageDTO(savedMessage);
+        return messageMapper.messageToMessageDTO(savedMessage);
     }
 
-    // Получить все сообщения для заданного чата
     public List<MessageDTO> getAllMessagesForChat(Long chatId) {
         List<Message> messages = messageRepository.findMessagesByChatId(chatId);
         return messages.stream().map(messageMapper::messageToMessageDTO).collect(Collectors.toList());

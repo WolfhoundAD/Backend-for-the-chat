@@ -8,4 +8,5 @@ import java.util.List;
 public class ChatDto {
     private Long chatID;
     private String chatName;
+    private List<Long> participantIds;
 }
