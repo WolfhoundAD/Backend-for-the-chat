@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors() // Включаем обработку CORS
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/login", "/api/register", "/css/**", "/js/**", "/**").permitAll()
+                .antMatchers("/login", "/register", "/css/**", "/js/**", "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()

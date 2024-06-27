@@ -14,10 +14,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,50 +49,32 @@ public class AuthController {
         response.put("message", "User registered successfully");
         return response;
     }
-    /*
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody UserDTO userDTO, HttpServletRequest request) {
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userDTO.getUsername());
-        Map<String, Object> response = new HashMap<>();
 
-        if (userDetails != null && passwordEncoder.matches(userDTO.getPassword(), userDetails.getPassword())) {
+    @PostMapping("/login")
+    public UserDTO apiLogin(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userDTO.getUsername());
+
+        if (passwordEncoder.matches(userDTO.getPassword(), userDetails.getPassword())) {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            HttpSession session = request.getSession(true);
-            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+            User user = userService.findByUsername(userDTO.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            User user = userService.findByUsername(userDTO.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            UserDTO responseUserDTO = new UserDTO();
+            responseUserDTO.setUserID(user.getId());
+            responseUserDTO.setUsername(user.getUsername());
+            responseUserDTO.setRole(user.getRole());
+            responseUserDTO.setLastLogin(user.getLastLogin()); //todo добавить маппер
 
-            response.put("message", "User logged in successfully");
-            response.put("user", user);
-            response.put("userId", user.getId());
-            return new ResponseEntity<>(response, HttpStatus.OK); //todo посмотреть спринг авторизацию, убрать мапу, передать через дто, убрать респонс ентити
+            return responseUserDTO;
         } else {
-            response.put("error", "Invalid username or password");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
         }
     }
 
-     */
-
-    @PostMapping("/login")
-    public ResponseEntity<String> apiLogin(HttpServletRequest request) {
-        // Retrieve authentication token from the request or security context
-        Authentication token = SecurityContextHolder.getContext().getAuthentication();
-
-        if (token != null && token.getName() != null) {
-            // Proceed with authenticated actions
-            String username = token.getName();
-            // Your logic here...
-            return ResponseEntity.ok("Logged in as: " + username);
-        } else {
-            // Handle authentication failure or missing token
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
-        }
-    }
 
     @PostMapping(path = "/logout", consumes = "application/json", produces = "application/json")
     @ResponseBody

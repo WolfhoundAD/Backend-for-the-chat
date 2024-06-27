@@ -3,9 +3,12 @@ package dev.chat.service;
 import dev.chat.dto.MessageDTO;
 import dev.chat.entity.Message;
 import dev.chat.entity.Profile;
+import dev.chat.entity.User;
 import dev.chat.mapper.MessageMapper;
+import dev.chat.repository.ChatRepository;
 import dev.chat.repository.MessageRepository;
 import dev.chat.repository.ProfileRepository;
+import dev.chat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +20,20 @@ import java.util.stream.Collectors;
 public class MessageService {
 
     private final MessageRepository messageRepository;
-    private final ProfileRepository profileRepository;
+    private final UserRepository userRepository;
+    private final ChatRepository chatRepository;
     private final MessageMapper messageMapper;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository, ProfileRepository profileRepository, MessageMapper messageMapper) {
+    public MessageService(MessageRepository messageRepository, UserRepository userRepository, ChatRepository chatRepository, MessageMapper messageMapper) {
         this.messageRepository = messageRepository;
-        this.profileRepository = profileRepository;
+        this.userRepository = userRepository;
+        this.chatRepository = chatRepository;
         this.messageMapper = messageMapper;
     }
 
     public MessageDTO createMessage(MessageDTO messageDTO) {
-        Optional<Profile> senderOptional = profileRepository.findById(messageDTO.getSenderID());
+        Optional<User> senderOptional = userRepository.findById(messageDTO.getSenderID());
         if (!senderOptional.isPresent()) {
             throw new RuntimeException("Sender not found");
         }

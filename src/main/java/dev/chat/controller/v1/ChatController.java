@@ -33,10 +33,11 @@ public class ChatController {
         return response;
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{userId}/chats")
     public List<ChatDto> getAllChatsForUser(@PathVariable Long userId) {
         return chatService.getAllChatsForUser(userId);
     }
+
 
     @PutMapping("/{chatId}/rename")
     public ChatDto renameChat(@PathVariable Long chatId, @RequestParam String newChatName) {

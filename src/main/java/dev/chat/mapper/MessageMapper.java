@@ -13,17 +13,17 @@ public interface MessageMapper {
     MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
 
     @Mappings({
-            @Mapping(source = "chatID", target = "chat.chatId"),
-            @Mapping(source = "senderID", target = "sender.profileId"),
+            @Mapping(source  = "chatID", target = "chat.chatId"),
+            @Mapping(source = "senderID", target = "sender.id"),
             @Mapping(source = "content", target = "content"),
-            @Mapping(source = "timestamp", target = "timestamp") //todo timestamp заменить на cratedate
+            @Mapping(source = "timestamp", target = "timestamp")
     })
     Message messageDTOToMessage(MessageDTO messageDTO);
 
     @Mappings({
             @Mapping(source = "messageId", target = "messageID"),
             @Mapping(source = "chat.chatId", target = "chatID"),
-            @Mapping(source = "sender.profileId", target = "senderID"),
+            @Mapping(source = "sender.id", target = "senderID"),
             @Mapping(source = "content", target = "content"),
             @Mapping(source = "timestamp", target = "timestamp")
     })

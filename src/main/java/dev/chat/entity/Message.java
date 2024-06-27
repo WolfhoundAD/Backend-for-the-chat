@@ -16,13 +16,14 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messageId;
 
+    //@ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    private Profile sender;
+    private User sender;
 
     @Column(name = "content")
     private String content;
