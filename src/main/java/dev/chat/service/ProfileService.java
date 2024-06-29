@@ -55,7 +55,11 @@ public class ProfileService {
         profile = profileRepository.save(profile);
         return profileMapper.profileToProfileDTO(profile);
     }
-
+    public ProfileDTO createProfileWithoutPhoto(ProfileDTO profileDTO) {
+        Profile profile = profileMapper.profileDTOToProfile(profileDTO);
+        profile = profileRepository.save(profile);
+        return profileMapper.profileToProfileDTO(profile);
+    }
     public void deleteProfile(Long profileId) {
         profileRepository.deleteById(profileId);
     }

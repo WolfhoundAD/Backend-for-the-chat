@@ -1,8 +1,10 @@
 package dev.chat.controller.v1;
 
+import dev.chat.dto.ProfileDTO;
 import dev.chat.dto.UserDTO;
 import dev.chat.entity.User;
 import dev.chat.service.CustomUserDetailsService;
+import dev.chat.service.ProfileService;
 import dev.chat.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,19 +39,36 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
+    private ProfileService profileService;
+
+    @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public Map<String, String> registerUser(@RequestBody UserDTO userDTO) {
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userService.createUser(userDTO);
+    public Map<String, String> registerUser(@RequestBody Map<String, String> registrationData) {
+        String username = registrationData.get("username");
+        String password = registrationData.get("password");
+        String fullName = registrationData.get("fullName");
+        String photoUrl = registrationData.get("photoUrl");
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(username);
+        userDTO.setPassword(passwordEncoder.encode(password));
+
+        ProfileDTO profileDTO = new ProfileDTO();
+        profileDTO.setFullName(fullName);
+        profileDTO.setPhotoUrl(photoUrl);
+
+        userService.registerUser(userDTO, profileDTO);
+
         Map<String, String> response = new HashMap<>();
-        response.put("message", "User registered successfully");
+        response.put("message", "User and profile registered successfully");
         return response;
     }
+
 
     @PostMapping("/login")
     public UserDTO apiLogin(@RequestBody UserDTO userDTO, HttpServletRequest request) {

@@ -25,5 +25,4 @@ public class Profile {
     @Column(name = "photo_url")
     private String photoUrl;
 
-
 }
