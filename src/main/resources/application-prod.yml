@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/chatBD
+    username: postgres
+    password: 192837465
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+    drop-first: false
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+server:
+  port: 8081
+
+minio:
+  endpoint: http://minio:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: chat-photos
