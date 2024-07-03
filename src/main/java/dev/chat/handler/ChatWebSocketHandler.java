@@ -1,9 +1,12 @@
 package dev.chat.handler;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,15 +36,18 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         System.out.println("WebSocket connection closed: " + session.getId());
     }
 
-    public void sendMessageToAll(String message) {
-        for (WebSocketSession session : sessions) {
-            if (session.isOpen()) {
+    public void sendMessageToAllClients(Object message) {
+        try {
+            TextMessage textMessage = new TextMessage(new ObjectMapper().writeValueAsString(message));
+            for (WebSocketSession session : sessions) {
                 try {
-                    session.sendMessage(new TextMessage(message));
-                } catch (Exception e) {
+                    session.sendMessage(textMessage);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
     }
 }

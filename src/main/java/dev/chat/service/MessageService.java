@@ -45,12 +45,12 @@ public class MessageService {
         message.setSender(senderOptional.get());
 
         Message savedMessage = messageRepository.save(message);
-        MessageDTO savedMessageDTO = messageMapper.messageToMessageDTO(savedMessage);
+        MessageDTO messageDTOToSend = messageMapper.messageToMessageDTO(savedMessage);
 
-        // Отправка сообщения через WebSocket
-        chatWebSocketHandler.sendMessageToAll(savedMessageDTO.toString());
+        // Отправляем сообщение всем подключенным WebSocket клиентам
+        chatWebSocketHandler.sendMessageToAllClients(messageDTOToSend);
 
-        return savedMessageDTO;
+        return messageMapper.messageToMessageDTO(savedMessage);
     }
 
     public List<MessageDTO> getAllMessagesForChat(Long chatId) {
