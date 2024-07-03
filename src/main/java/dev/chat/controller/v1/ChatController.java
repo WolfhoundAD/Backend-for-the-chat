@@ -38,7 +38,6 @@ public class ChatController {
         return chatService.getAllChatsForUser(userId);
     }
 
-
     @PutMapping("/{chatId}/rename")
     public ChatDto renameChat(@PathVariable Long chatId, @RequestParam String newChatName) {
         return chatService.renameChat(chatId, newChatName);

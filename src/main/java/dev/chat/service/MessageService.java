@@ -4,6 +4,7 @@ import dev.chat.dto.MessageDTO;
 import dev.chat.entity.Message;
 import dev.chat.entity.Profile;
 import dev.chat.entity.User;
+import dev.chat.handler.ChatWebSocketHandler;
 import dev.chat.mapper.MessageMapper;
 import dev.chat.repository.ChatRepository;
 import dev.chat.repository.MessageRepository;
@@ -23,13 +24,15 @@ public class MessageService {
     private final UserRepository userRepository;
     private final ChatRepository chatRepository;
     private final MessageMapper messageMapper;
+    private final ChatWebSocketHandler chatWebSocketHandler;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository, UserRepository userRepository, ChatRepository chatRepository, MessageMapper messageMapper) {
+    public MessageService(MessageRepository messageRepository, UserRepository userRepository, ChatRepository chatRepository, MessageMapper messageMapper, ChatWebSocketHandler chatWebSocketHandler) {
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
         this.chatRepository = chatRepository;
         this.messageMapper = messageMapper;
+        this.chatWebSocketHandler = chatWebSocketHandler;
     }
 
     public MessageDTO createMessage(MessageDTO messageDTO) {
@@ -42,7 +45,12 @@ public class MessageService {
         message.setSender(senderOptional.get());
 
         Message savedMessage = messageRepository.save(message);
-        return messageMapper.messageToMessageDTO(savedMessage);
+        MessageDTO savedMessageDTO = messageMapper.messageToMessageDTO(savedMessage);
+
+        // Отправка сообщения через WebSocket
+        chatWebSocketHandler.sendMessageToAll(savedMessageDTO.toString());
+
+        return savedMessageDTO;
     }
 
     public List<MessageDTO> getAllMessagesForChat(Long chatId) {
