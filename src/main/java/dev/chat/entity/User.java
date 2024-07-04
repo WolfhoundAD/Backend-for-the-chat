@@ -27,5 +27,5 @@ public class User {
 
     @Column(name = "last_login")
     //todo datetime& - сделать потом
-    private LocalDate lastLogin;
+    private Timestamp lastLogin;
 }

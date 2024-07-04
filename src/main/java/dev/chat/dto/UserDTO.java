@@ -2,6 +2,8 @@ package dev.chat.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Getter
@@ -12,5 +14,5 @@ public class UserDTO {
     private String username;
     private String password;
     private String role;
-    private LocalDate lastLogin;
+    private Timestamp lastLogin;
 }

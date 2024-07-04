@@ -99,6 +99,7 @@ public class AuthController {
     @PostMapping(path = "/logout", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public Principal logout(Principal user, HttpServletRequest request, HttpServletResponse response) {
+
         CookieClearingLogoutHandler cookieClearingLogoutHandler = new CookieClearingLogoutHandler(
                 AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY
         );
@@ -108,4 +109,5 @@ public class AuthController {
 
         return user;
     }
+
 }

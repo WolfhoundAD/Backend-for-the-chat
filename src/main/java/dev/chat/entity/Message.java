@@ -1,6 +1,7 @@
 package dev.chat.entity;
 import lombok.*;
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Message {
     private String content;
 
     @Column(name = "timestamp")
-    private LocalDate timestamp;
+    private Timestamp timestamp;
 
     @OneToMany(mappedBy = "message")
     private List<Attachment> attachments;

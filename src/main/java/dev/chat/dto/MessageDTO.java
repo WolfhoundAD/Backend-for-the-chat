@@ -1,6 +1,8 @@
 package dev.chat.dto;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Getter
@@ -10,5 +12,5 @@ public class MessageDTO {
     private Long chatID;
     private Long senderID;
     private String content;
-    private LocalDate timestamp;
+    private Timestamp timestamp;
 }
