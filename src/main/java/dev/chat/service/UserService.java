@@ -7,7 +7,9 @@ import dev.chat.entity.User;
 import dev.chat.repository.UserRepository;
 import dev.chat.mapper.UserMapper;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,13 +29,14 @@ public class UserService {
     }
 
     @Transactional
-    public void registerUser(UserDTO userDTO, ProfileDTO profileDTO) {
+    public void registerUser(UserDTO userDTO, ProfileDTO profileDTO, MultipartFile photoFile) throws IOException {
         User user = userMapper.userDTOToUser(userDTO);
         user = userRepository.save(user);
 
         profileDTO.setUserID(user.getId());
-        profileService.createProfileWithoutPhoto(profileDTO);
+        profileService.createProfile(profileDTO, photoFile);
     }
+
 
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();

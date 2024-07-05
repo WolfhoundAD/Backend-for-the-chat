@@ -21,11 +21,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,26 +50,28 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public Map<String, String> registerUser(@RequestBody Map<String, String> registrationData) {
-        String username = registrationData.get("username");
-        String password = registrationData.get("password");
-        String fullName = registrationData.get("fullName");
-        String photoUrl = registrationData.get("photoUrl");
-
+    public Map<String, String> registerUser(@RequestParam("username") String username,
+                                            @RequestParam("password") String password,
+                                            @RequestParam("fullName") String fullName,
+                                            @RequestParam("photo") MultipartFile photoFile) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(username);
         userDTO.setPassword(passwordEncoder.encode(password));
 
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.setFullName(fullName);
-        profileDTO.setPhotoUrl(photoUrl);
 
-        userService.registerUser(userDTO, profileDTO);
+        try {
+            userService.registerUser(userDTO, profileDTO, photoFile);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to register user", e);
+        }
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "User and profile registered successfully");
         return response;
     }
+
 
 
     @PostMapping("/login")
