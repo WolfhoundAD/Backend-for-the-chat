@@ -3,6 +3,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,6 +33,8 @@ public class Message {
     @Column(name = "timestamp")
     private Timestamp timestamp;
 
-    @OneToMany(mappedBy = "message")
-    private List<Attachment> attachments;
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attachment> attachments = new ArrayList<>();
+
+
 }
