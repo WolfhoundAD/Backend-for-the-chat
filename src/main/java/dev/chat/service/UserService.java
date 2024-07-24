@@ -1,4 +1,5 @@
 package dev.chat.service;
+
 import dev.chat.dto.ProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,9 +51,11 @@ public class UserService {
         user = userRepository.save(user);
         return userMapper.userToUserDTO(user);
     }
+
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
     }

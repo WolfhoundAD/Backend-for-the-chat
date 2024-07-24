@@ -1,4 +1,5 @@
 package dev.chat.mapper;
+
 import dev.chat.dto.ChatDto;
 import dev.chat.entity.Chat;
 import dev.chat.entity.User;

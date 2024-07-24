@@ -35,8 +35,6 @@ public class MessageController {
     }
 
 
-
-
     @GetMapping("/chat/{chatId}")
     public List<MessageDTO> getAllMessagesForChat(@PathVariable Long chatId) {
         return messageService.getAllMessagesForChat(chatId);

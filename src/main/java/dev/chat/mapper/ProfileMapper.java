@@ -1,4 +1,5 @@
 package dev.chat.mapper;
+
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -6,6 +6,7 @@ import dev.chat.entity.User;
 import dev.chat.service.CustomUserDetailsService;
 import dev.chat.service.ProfileService;
 import dev.chat.service.UserService;
+import dev.chat.util.MinioUrlGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,9 +74,8 @@ public class AuthController {
     }
 
 
-
     @PostMapping("/login")
-    public UserDTO apiLogin(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+    public ProfileDTO apiLogin(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(userDTO.getUsername());
 
         if (passwordEncoder.matches(userDTO.getPassword(), userDetails.getPassword())) {
@@ -87,13 +87,19 @@ public class AuthController {
             User user = userService.findByUsername(userDTO.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-            UserDTO responseUserDTO = new UserDTO();
-            responseUserDTO.setUserID(user.getId());
-            responseUserDTO.setUsername(user.getUsername());
-            responseUserDTO.setRole(user.getRole());
-            responseUserDTO.setLastLogin(user.getLastLogin()); //todo добавить маппер
+            ProfileDTO profileDTO = profileService.getProfileByUserId(user.getId());
+            if (profileDTO == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found");
+            }
 
-            return responseUserDTO;
+            profileDTO.setUsername(user.getUsername());
+            profileDTO.setRole(user.getRole());
+            profileDTO.setLastLogin(user.getLastLogin());
+            // Генерация полного URL для photoUrl
+            String fullPhotoUrl = MinioUrlGenerator.generateMinioUrl(profileDTO.getPhotoUrl());
+            profileDTO.setPhotoUrl(fullPhotoUrl);
+
+            return profileDTO;
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
         }

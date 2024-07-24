@@ -1,13 +1,14 @@
 package dev.chat.service;
 
+import dev.chat.dto.ProfileDTO;
+import dev.chat.entity.Profile;
+import dev.chat.mapper.ProfileMapper;
+import dev.chat.repository.ProfileRepository;
+import dev.chat.util.MinioUrlGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import dev.chat.dto.ProfileDTO;
-import dev.chat.entity.Profile;
-import dev.chat.repository.ProfileRepository;
-import dev.chat.mapper.ProfileMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,13 +54,30 @@ public class ProfileService {
         }
 
         profile = profileRepository.save(profile);
-        return profileMapper.profileToProfileDTO(profile);
+        ProfileDTO savedProfileDTO = profileMapper.profileToProfileDTO(profile);
+
+        // Генерация полного URL для photoUrl
+        String fullPhotoUrl = MinioUrlGenerator.generateMinioUrl(savedProfileDTO.getPhotoUrl());
+        savedProfileDTO.setPhotoUrl(fullPhotoUrl);
+
+        return savedProfileDTO;
     }
+
     public ProfileDTO createProfileWithoutPhoto(ProfileDTO profileDTO) {
         Profile profile = profileMapper.profileDTOToProfile(profileDTO);
         profile = profileRepository.save(profile);
         return profileMapper.profileToProfileDTO(profile);
     }
+
+    public ProfileDTO getProfileByUserId(Long userId) {
+        List<Profile> profiles = profileRepository.findProfilesByUserId(userId);
+        if (profiles.isEmpty()) {
+            return null;
+        }
+        Profile profile = profiles.get(0); // Предполагается, что у пользователя один профиль
+        return profileMapper.profileToProfileDTO(profile);
+    }
+
     public void deleteProfile(Long profileId) {
         profileRepository.deleteById(profileId);
     }

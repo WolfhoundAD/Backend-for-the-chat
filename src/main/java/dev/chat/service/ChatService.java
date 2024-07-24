@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,7 @@ public class ChatService {
         this.chatParticipantRepository = chatParticipantRepository;
         this.chatMapper = chatMapper;
     }
+
     @Transactional
     public ChatDto createChat(ChatDto chatDto) {
         Chat chat = chatMapper.chatDTOToChat(chatDto);
@@ -42,8 +44,9 @@ public class ChatService {
         System.out.println("Chat saved: " + chat);
 
         return chatMapper.chatToChatDTO(chat);
-        
+
     }
+
     //todo добавить пагинацию
     public List<ChatDto> getAllChatsForUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));

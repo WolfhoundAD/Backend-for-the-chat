@@ -1,6 +1,7 @@
 package dev.chat.entity;
 
 import lombok.*;
+
 import javax.persistence.*;
 
 @Entity

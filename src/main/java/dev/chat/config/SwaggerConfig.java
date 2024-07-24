@@ -17,7 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableWebMvc
 @EnableTransactionManagement
 public class SwaggerConfig {
-//http://localhost:8081/swagger-ui/index.html
+    //http://localhost:8081/swagger-ui/index.html
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)

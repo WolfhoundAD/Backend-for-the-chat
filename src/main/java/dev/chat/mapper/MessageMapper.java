@@ -13,7 +13,7 @@ public interface MessageMapper {
     MessageMapper INSTANCE = Mappers.getMapper(MessageMapper.class);
 
     @Mappings({
-            @Mapping(source  = "chatID", target = "chat.chatId"),
+            @Mapping(source = "chatID", target = "chat.chatId"),
             @Mapping(source = "senderID", target = "sender.id"),
             @Mapping(source = "content", target = "content"),
             @Mapping(source = "timestamp", target = "timestamp")

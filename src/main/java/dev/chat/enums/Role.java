@@ -1,4 +1,5 @@
 package dev.chat.enums;
+
 import lombok.Getter;
 
 @Getter
